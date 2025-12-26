@@ -1,0 +1,27 @@
+name: OMI Lua CI
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "0 3 * * *"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tshark
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y tshark
+      - name: Syntax check
+        run: bash wireshark-lua/tools/syntax_check.sh
+      - name: Generate metadata
+        run: python3 wireshark-lua/tools/gen_metadata.py
+      - name: Generate synthetic PCAP
+        run: |
+          sudo apt-get install -y text2pcap
+          bash wireshark-lua/tools/synth_from_json.sh wireshark-lua/test/synth/sample.json wireshark-lua/test/synth/sample.pcap
+      - name: Update checksums
+        run: python3 wireshark-lua/tools/update_checksums.py
+      - name: Malformed scan
+        run: bash wireshark-lua/tools/malformed_check.sh wireshark-lua/test/synth/sample.pcap wireshark-lua/Nasdaq/Nasdaq.Equities.TotalView.Itch.v4.1.Script.Dissector.lua
