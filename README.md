@@ -403,7 +403,7 @@ Contributing
 
 License
 
-- MIT-style licensing recommended; ensure compliance with your organizational policies
+- Licensed under the GNU General Public License v3.0 (GPL-3.0); ensure compliance with its copyleft requirements and your organizational policies
 
 Disclaimer
 
